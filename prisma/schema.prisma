@@ -1,0 +1,49 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+model Document {
+  id              String @id @default(uuid())
+  content         String
+  title           String
+  url             String @unique
+  links           String[]
+  createdAt       DateTime @default(now())
+
+  invIndex         InvertedIndex[] @relation("doc-index")
+}
+
+model InvertedIndex {
+  id            String @id @default(uuid())
+  word          String
+  documentId    String
+  createdAt     DateTime @default(now())
+
+  document      Document @relation("doc-index", fields: [documentId], references: [id])
+
+  @@index([word])
+}
+
+model VisitedUrls {
+  id            String @id @default(uuid())
+  url           String @unique
+  status        VisistedUrlStatus @default(PENDING)
+  createdAt     DateTime @default(now())
+
+  @@index([url])
+}
+
+enum VisistedUrlStatus {
+  PENDING
+  VISITED
+  FAILED
+}
