@@ -8,14 +8,12 @@ new Worker('url-crawler', async (job : any) => {
     console.log("Worker has started");
     if(job.name === 'urls'){
         const url = job.data.url;
+        console.log(url);
         const page = await getHTML(url);
-        await handlePage(page);
-    }
-    
-    
-    
+        await handlePage(page, url);
+    } 
 },
 {
     connection : redisConnection,
     concurrency: 5
-})
+});

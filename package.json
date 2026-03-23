@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "tsc -b && node ./dist/index.js",
-    "seed" : "tsc -b && node ./dist/seed/seed.js"
+    "seed" : "tsc -b && node ./dist/seed/seed.js",
+    "crawler" : "tsc -b && node ./dist/crawler/crawler.worker.js"
   },
   "keywords": [],
   "author": "",
