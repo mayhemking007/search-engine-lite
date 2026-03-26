@@ -27,6 +27,7 @@ model InvertedIndex {
   word          String
   documentId    String
   createdAt     DateTime @default(now())
+  frequency     Int
 
   document      Document @relation("doc-index", fields: [documentId], references: [id])
 

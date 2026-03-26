@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "tsc -b && node ./dist/index.js",
     "seed" : "tsc -b && node ./dist/seed/seed.js",
-    "crawler" : "tsc -b && node ./dist/crawler/crawler.worker.js"
+    "crawler" : "tsc -b && node ./dist/crawler/crawler.worker.js",
+    "indexer" : "tsc -b && node ./dist/indexer/indexer.worker.js"
   },
   "keywords": [],
   "author": "",

@@ -18,7 +18,7 @@ export const handlePage = async (page : any, url : string) => {
                 links : urls
             }
         });
-        await indexQueue.add("index-doc", {doc : doc});
+        await indexQueue.add("index-doc", {docId : doc.id});
     }
     catch(e){
         console.log(e);
