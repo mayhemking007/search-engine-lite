@@ -6,7 +6,7 @@ export const tokenizeText = (text : string) => {
     const words = text.split(" ").filter(Boolean);
     const stopWords = new Set(["the", "is", "a", "an", "and", "or", "to", "of", "in"]);
     const tokens = words.filter((word) => !stopWords.has(word));
-    return tokens;
+    return [...new Set(tokens)];
 }
 
 export const getTermFrequency = (tokens : string[]) => {
