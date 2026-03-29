@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { cleanText, tokenizeText } from "../utils/cleanText.js";
 import { prisma } from "../db/prisma.js";
+import { redis } from "../lib/redisClient.js";
 
 export const queryRouter = Router();
 
@@ -9,7 +10,16 @@ queryRouter.post("/", async(req, res) => {
     const cleanQuery = cleanText(query);
     const tokens = tokenizeText(cleanQuery);
     console.log(tokens);
+    const cacheKey = `search:${tokens.join("_")}`;
     try{
+        const cache =  await redis.get(cacheKey);
+        if(cache){
+            console.log("cache Hit");
+            return res.json({
+                success : true,
+                data : JSON.parse(cache)
+            });
+        }
         const results = await prisma.invertedIndex.groupBy({
             by : ["documentId"],
             where : {word : {in : tokens}},
@@ -30,8 +40,9 @@ queryRouter.post("/", async(req, res) => {
             id : d.id,
             title : d.title,
             link : d.url,
-            content : d.content.slice(0, 30)
+            content : d.content.slice(0, 100) + "..."
         }))
+        await redis.set(cacheKey, JSON.stringify(showData), "EX", 300);
         res.json({
             success : true,
             data : showData
